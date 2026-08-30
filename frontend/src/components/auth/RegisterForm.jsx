@@ -45,9 +45,7 @@ const RegisterForm = () => {
         email: formData.email,
         password: formData.password
       });
-      const { data } = response.data;
-
-      login(data, data.token);
+      login(response.data.data);
       router.push('/projects');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Please try again.');

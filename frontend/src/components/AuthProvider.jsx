@@ -5,15 +5,13 @@ import useStore from '@/store/useStore';
 import Loader from '@/components/ui/Loader';
 
 const AuthProvider = ({ children }) => {
-  const { checkAuth, authChecked, token } = useStore();
+  const { checkAuth, authChecked } = useStore();
 
   useEffect(() => {
-    if (token) {
-      checkAuth();
-    }
+    checkAuth();
   }, []);
 
-  if (token && !authChecked) {
+  if (!authChecked) {
     return <Loader fullScreen />;
   }
 

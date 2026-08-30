@@ -1,16 +1,8 @@
 import { create } from 'zustand';
 import api from '@/lib/api';
 
-const getStoredToken = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('token');
-  }
-  return null;
-};
-
 const useStore = create((set, get) => ({
   user: null,
-  token: getStoredToken(),
   projects: [],
   currentProject: null,
   tasks: [],
@@ -19,45 +11,27 @@ const useStore = create((set, get) => ({
   authChecked: false,
 
   setUser: (user) => set({ user }),
-  setToken: (token) => {
-    if (typeof window !== 'undefined') {
-      if (token) {
-        localStorage.setItem('token', token);
-      } else {
-        localStorage.removeItem('token');
-      }
-    }
-    set({ token });
+
+  login: (user) => {
+    set({ user });
   },
 
-  login: (user, token) => {
-    set({ user, token });
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token);
+  logout: async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (err) {
+      // Ignore error
     }
-  },
-
-  logout: () => {
-    set({ user: null, token: null, projects: [], currentProject: null, tasks: [] });
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-    }
+    set({ user: null, projects: [], currentProject: null, tasks: [] });
   },
 
   checkAuth: async () => {
-    const token = getStoredToken();
-    if (!token) {
-      set({ authChecked: true });
-      return false;
-    }
-
     try {
       const response = await api.get('/auth/me');
-      set({ user: response.data.data, token, authChecked: true });
+      set({ user: response.data.data, authChecked: true });
       return true;
     } catch (err) {
-      localStorage.removeItem('token');
-      set({ user: null, token: null, authChecked: true });
+      set({ user: null, authChecked: true });
       return false;
     }
   },

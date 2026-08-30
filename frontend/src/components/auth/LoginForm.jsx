@@ -33,9 +33,7 @@ const LoginForm = () => {
 
     try {
       const response = await api.post('/auth/login', formData);
-      const { data } = response.data;
-
-      login(data, data.token);
+      login(response.data.data);
       router.push('/projects');
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please try again.');

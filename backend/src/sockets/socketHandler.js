@@ -4,22 +4,38 @@ const User = require('../models/User');
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 
+const parseCookies = (cookieHeader) => {
+  const cookies = {};
+  if (cookieHeader) {
+    cookieHeader.split(';').forEach(cookie => {
+      const [name, ...rest] = cookie.split('=');
+      cookies[name.trim()] = rest.join('=').trim();
+    });
+  }
+  return cookies;
+};
+
 const socketHandler = (io) => {
   io.use(async (socket, next) => {
-    const token = socket.handshake.auth.token;
-    
+    let token = socket.handshake.auth.token;
+
+    if (!token && socket.handshake.headers.cookie) {
+      const cookies = parseCookies(socket.handshake.headers.cookie);
+      token = cookies.token;
+    }
+
     if (!token) {
       return next(new Error('Authentication required'));
     }
-    
+
     try {
       const decoded = jwt.verify(token, config.jwtSecret);
       const user = await User.findById(decoded.id);
-      
+
       if (!user) {
         return next(new Error('User not found'));
       }
-      
+
       socket.userId = user._id.toString();
       socket.userName = user.name;
       socket.userRole = user.role;

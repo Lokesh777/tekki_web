@@ -17,24 +17,24 @@ import {
 } from '@/lib/socket';
 
 export const useSocket = (projectId = null) => {
-  const { token, setTasks, updateTaskStatus } = useStore();
+  const { user, setTasks, updateTaskStatus } = useStore();
   const joinedProjects = useRef(new Set());
 
   useEffect(() => {
-    if (token) {
-      connectSocket(token);
+    if (user) {
+      connectSocket();
     }
 
     return () => {
       disconnectSocket();
       joinedProjects.current.clear();
     };
-  }, [token]);
+  }, [user]);
 
   useEffect(() => {
-    if (projectId && token) {
-      const socket = connectSocket(token);
-      
+    if (projectId && user) {
+      const socket = connectSocket();
+
       if (socket?.connected) {
         joinProject(projectId);
         joinedProjects.current.add(projectId);
@@ -68,7 +68,7 @@ export const useSocket = (projectId = null) => {
         joinedProjects.current.delete(projectId);
       };
     }
-  }, [projectId, token, setTasks, updateTaskStatus]);
+  }, [projectId, user, setTasks, updateTaskStatus]);
 
   const changeTaskStatus = useCallback((taskId, status) => {
     emitTaskStatusChange(taskId, status);
