@@ -1,17 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useStore from '@/store/useStore';
 import Loader from '@/components/ui/Loader';
 
 const AuthProvider = ({ children }) => {
   const { checkAuth, authChecked } = useStore();
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    checkAuth();
+    const verify = async () => {
+      await checkAuth();
+      setChecking(false);
+    };
+    verify();
   }, []);
 
-  if (!authChecked) {
+  if (checking || !authChecked) {
     return <Loader fullScreen />;
   }
 

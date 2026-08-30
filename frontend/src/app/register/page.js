@@ -7,7 +7,7 @@ import RegisterForm from '@/components/auth/RegisterForm';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { user, authChecked, token } = useStore();
+  const { user } = useStore();
 
   useEffect(() => {
     if (user) {
@@ -16,10 +16,6 @@ export default function RegisterPage() {
   }, [user, router]);
 
   if (user) {
-    return null;
-  }
-
-  if (token && !authChecked) {
     return null;
   }
 
