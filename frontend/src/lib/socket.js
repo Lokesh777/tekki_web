@@ -2,10 +2,20 @@ import { io } from 'socket.io-client';
 
 let socket = null;
 
+const getWsUrl = () => {
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    return process.env.NEXT_PUBLIC_WS_URL;
+  }
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return 'http://localhost:5000';
+};
+
 export const connectSocket = (token) => {
   if (socket?.connected) return socket;
   
-  socket = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:5000', {
+  socket = io(getWsUrl(), {
     auth: { token },
     reconnection: true,
     reconnectionAttempts: 5,
