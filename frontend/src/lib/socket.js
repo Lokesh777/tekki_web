@@ -2,14 +2,19 @@ import { io } from 'socket.io-client';
 
 let socket = null;
 
+const PRODUCTION_WS = 'https://tekki-web.onrender.com';
+
 const getWsUrl = () => {
   if (process.env.NEXT_PUBLIC_WS_URL) {
     return process.env.NEXT_PUBLIC_WS_URL;
   }
   if (typeof window !== 'undefined') {
-    return window.location.origin;
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000';
+    }
+    return PRODUCTION_WS;
   }
-  return 'http://localhost:5000';
+  return PRODUCTION_WS;
 };
 
 export const connectSocket = () => {

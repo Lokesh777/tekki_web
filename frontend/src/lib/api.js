@@ -1,14 +1,35 @@
 import axios from 'axios';
 
+const PRODUCTION_API = 'https://tekki-web.onrender.com/api';
+const PRODUCTION_WS = 'https://tekki-web.onrender.com';
+
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
   if (typeof window !== 'undefined') {
-    return window.location.origin + '/api';
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000/api';
+    }
+    return PRODUCTION_API;
   }
-  return 'http://localhost:5000/api';
+  return PRODUCTION_API;
 };
+
+const getWsUrl = () => {
+  if (process.env.NEXT_PUBLIC_WS_URL) {
+    return process.env.NEXT_PUBLIC_WS_URL;
+  }
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname === 'localhost') {
+      return 'http://localhost:5000';
+    }
+    return PRODUCTION_WS;
+  }
+  return PRODUCTION_WS;
+};
+
+export { getWsUrl };
 
 const api = axios.create({
   baseURL: getBaseUrl(),
