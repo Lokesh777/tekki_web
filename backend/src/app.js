@@ -15,9 +15,16 @@ const taskDetailRoutes = require('./routes/taskDetailRoutes');
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  config.frontendUrl,
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://frontend-nu-murex-xmxjk54pz3.vercel.app'
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: config.wsCorsOrigin,
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -33,7 +40,7 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: config.frontendUrl,
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
