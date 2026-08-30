@@ -7,17 +7,15 @@ import ProjectList from '@/components/projects/ProjectList';
 
 export default function ProjectsPage() {
   const router = useRouter();
-  const { user, authChecked } = useStore();
+  const { user } = useStore();
 
   useEffect(() => {
-    if (authChecked && !user) {
+    if (!user) {
       router.push('/login');
     }
-  }, [user, authChecked, router]);
+  }, [user, router]);
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return <ProjectList />;
 }

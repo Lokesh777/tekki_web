@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 import api from '@/lib/api';
 
-const useStore = create((set, get) => ({
+const useStore = create((set) => ({
   user: null,
   projects: [],
   currentProject: null,
   tasks: [],
   loading: false,
   error: null,
-  authChecked: false,
 
   setUser: (user) => set({ user }),
 
@@ -19,19 +18,17 @@ const useStore = create((set, get) => ({
   logout: async () => {
     try {
       await api.post('/auth/logout');
-    } catch (err) {
-      // Ignore error
-    }
+    } catch (err) {}
     set({ user: null, projects: [], currentProject: null, tasks: [] });
   },
 
   checkAuth: async () => {
     try {
-      const response = await api.get('/auth/me');
-      set({ user: response.data.data, authChecked: true });
+      const response = await api.get('/auth/me', { timeout: 5000 });
+      set({ user: response.data.data });
       return true;
     } catch (err) {
-      set({ user: null, authChecked: true });
+      set({ user: null });
       return false;
     }
   },

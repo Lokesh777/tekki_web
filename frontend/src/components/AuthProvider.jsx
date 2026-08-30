@@ -5,18 +5,27 @@ import useStore from '@/store/useStore';
 import Loader from '@/components/ui/Loader';
 
 const AuthProvider = ({ children }) => {
-  const { checkAuth, authChecked } = useStore();
-  const [checking, setChecking] = useState(true);
+  const { checkAuth } = useStore();
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    let timeout;
+
     const verify = async () => {
       await checkAuth();
-      setChecking(false);
+      setReady(true);
     };
+
     verify();
+
+    timeout = setTimeout(() => {
+      setReady(true);
+    }, 6000);
+
+    return () => clearTimeout(timeout);
   }, []);
 
-  if (checking || !authChecked) {
+  if (!ready) {
     return <Loader fullScreen />;
   }
 

@@ -7,17 +7,15 @@ import TaskBoard from '@/components/tasks/TaskBoard';
 
 export default function ProjectDetailPage() {
   const router = useRouter();
-  const { user, authChecked } = useStore();
+  const { user } = useStore();
 
   useEffect(() => {
-    if (authChecked && !user) {
+    if (!user) {
       router.push('/login');
     }
-  }, [user, authChecked, router]);
+  }, [user, router]);
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return <TaskBoard />;
 }
