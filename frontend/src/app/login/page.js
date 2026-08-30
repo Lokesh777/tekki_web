@@ -7,7 +7,7 @@ import LoginForm from '@/components/auth/LoginForm';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user } = useStore();
+  const { user, authChecked, token } = useStore();
 
   useEffect(() => {
     if (user) {
@@ -16,6 +16,10 @@ export default function LoginPage() {
   }, [user, router]);
 
   if (user) {
+    return null;
+  }
+
+  if (token && !authChecked) {
     return null;
   }
 
