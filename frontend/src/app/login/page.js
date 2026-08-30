@@ -7,17 +7,12 @@ import LoginForm from '@/components/auth/LoginForm';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, authChecked } = useStore();
+  const { user } = useStore();
 
   useEffect(() => {
-    if (user) {
-      router.push('/projects');
-    }
-  }, [user, router]);
+    if (user) router.push('/projects');
+  }, [user]);
 
-  if (user) {
-    return null;
-  }
-
+  if (user) return null;
   return <LoginForm />;
 }

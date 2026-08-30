@@ -3,6 +3,7 @@ import api from '@/lib/api';
 
 const useStore = create((set) => ({
   user: null,
+  authChecked: false,
   projects: [],
   currentProject: null,
   tasks: [],
@@ -24,11 +25,11 @@ const useStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      const response = await api.get('/auth/me', { timeout: 5000 });
-      set({ user: response.data.data });
+      const response = await api.get('/auth/me', { timeout: 8000 });
+      set({ user: response.data.data, authChecked: true });
       return true;
     } catch (err) {
-      set({ user: null });
+      set({ user: null, authChecked: true });
       return false;
     }
   },

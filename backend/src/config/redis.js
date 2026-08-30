@@ -1,33 +1,25 @@
-const Redis = require('ioredis');
-const config = require('./config');
-
 let redis = null;
 
 try {
-  redis = new Redis(config.redisUrl, {
-    maxRetriesPerRequest: 3,
-    retryStrategy(times) {
-      if (times > 10) return null;
-      const delay = Math.min(times * 50, 2000);
-      return delay;
-    },
-    enableOfflineQueue: false,
-    lazyConnect: true
-  });
+  const Redis = require('ioredis');
+  const config = require('./config');
 
-  redis.on('connect', () => {
-    console.log('Redis Connected');
-  });
+  if (config.redisUrl && config.redisUrl !== 'redis://localhost:6379') {
+    redis = new Redis(config.redisUrl, {
+      maxRetriesPerRequest: 3,
+      retryStrategy(times) {
+        if (times > 3) return null;
+        return Math.min(times * 50, 2000);
+      },
+      enableOfflineQueue: false,
+      lazyConnect: true,
+      connectTimeout: 2000
+    });
 
-  redis.on('error', (err) => {
-    console.error('Redis error (non-critical):', err.message);
-  });
-
-  redis.connect().catch(() => {
-    console.log('Redis not available - running without cache');
-  });
-} catch (err) {
-  console.log('Redis not available - running without cache');
-}
+    redis.on('connect', () => console.log('Redis Connected'));
+    redis.on('error', () => {});
+    redis.connect().catch(() => {});
+  }
+} catch (err) {}
 
 module.exports = redis;
