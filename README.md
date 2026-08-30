@@ -3,8 +3,8 @@
 A real-time collaborative project management tool built for growing companies.
 
 **Live URLs:**
-- Frontend: https://your-app.netlify.app
-- Backend API: https://tekki-pm-backend.onrender.com
+- Frontend: https://frontend-nu-murex-xmxjk54pz3.vercel.app/
+- Backend API: https://tekki-web.onrender.com
 
 ---
 

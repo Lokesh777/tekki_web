@@ -11,9 +11,9 @@
 
 | Deliverable | Status | URL/Location |
 |-------------|--------|--------------|
-| GitHub Repository | ✅ | https://github.com/yourusername/tekki_webSol |
-| Deployed Frontend | ✅ | https://your-app.netlify.app |
-| Deployed Backend | ✅ | https://tekki-pm-backend.onrender.com |
+| GitHub Repository | ✅ | https://github.com/Lokesh777/tekki_web |
+| Deployed Frontend | ✅ | https://frontend-nu-murex-xmxjk54pz3.vercel.app/ |
+| Deployed Backend | ✅ | https://tekki-web.onrender.com |
 | FRD Document | ✅ | [docs/FRD.md](./FRD.md) |
 | System Design | ✅ | [docs/SYSTEM_DESIGN.md](./SYSTEM_DESIGN.md) |
 | API Documentation | ✅ | [docs/API_DOCUMENTATION.md](./API_DOCUMENTATION.md) |
