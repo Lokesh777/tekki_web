@@ -41,7 +41,8 @@ socketHandler(io);
 
 app.use(helmet({
   crossOriginResourcePolicy: false,
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false
 }));
 
 app.use(cors({
@@ -60,7 +61,12 @@ app.use('/api/projects', projectRoutes);
 app.use('/api', taskDetailRoutes);
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    nodeEnv: config.nodeEnv,
+    frontendUrl: config.frontendUrl
+  });
 });
 
 app.use(errorHandler);
